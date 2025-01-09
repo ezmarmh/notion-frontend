@@ -14,10 +14,13 @@ const databaseId = '17513b20411d801daab0c4ef82d0e9b3'; // Reemplaza con el ID co
 
 // Ruta raíz para verificar que el servidor funciona
 app.get('/', (req, res) => {
-  res.send('Servidor funcionando correctamente. Usa la ruta /api/data para obtener los datos.');
+  res.send('Servidor funcionando correctamente. Usa la ruta /api/data para obtener los datos de la propiedad "Calculo de Meta".');
 });
 
-// Ruta para obtener datos de Notion
+// Ruta para manejar las solicitudes de favicon (para evitar errores)
+app.get('/favicon.ico', (req, res) => res.status(204));
+
+// Ruta para obtener el valor de la propiedad "Calculo de Meta"
 app.get('/api/data', async (req, res) => {
   try {
     console.log('Consultando la base de datos de Notion...');
@@ -28,7 +31,7 @@ app.get('/api/data', async (req, res) => {
     // Procesar los datos obtenidos
     const data = response.results.map((item) => ({
       id: item.id,
-      estado: item.properties["ESTADO"]?.title?.[0]?.text?.content || 'Sin estado', // Ajusta según las propiedades
+      calculoDeMeta: item.properties["Calculo de Meta"]?.number || 0, // Obtener el valor numérico o un valor predeterminado de 0
     }));
 
     console.log('Datos obtenidos:', data); // Mostrar datos en los logs
